@@ -7,15 +7,13 @@ import {
 } from "react-native";
 import styles from "./styles";
 import { LoginScreenProps } from "./types";
-import { TextInput, Button, HelperText } from "react-native-paper";
+import { Button, HelperText, TextInput } from "react-native-paper";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen: React.FC<LoginScreenProps> = (props) => {
   const { navigation } = props;
   const { navigate } = navigation;
-
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -24,10 +22,9 @@ const LoginScreen: React.FC<LoginScreenProps> = (props) => {
     isPending,
     error,
   } = useMutation({
-    mutationFn: async (variables: { email: string; password: string }) =>
+    mutationFn: (variables: { email: string; password: string }) =>
       api.auth.login(variables),
-    onSuccess: async ({ token }) => {
-      await AsyncStorage.setItem("auth-token", token);
+    onSuccess: () => {
       navigate("Splash");
     },
   });
@@ -47,19 +44,21 @@ const LoginScreen: React.FC<LoginScreenProps> = (props) => {
           <View style={{ gap: 8 }}>
             <TextInput
               label={"Email"}
+              autoCapitalize="none"
+              keyboardType="email-address"
               value={email}
               onChangeText={setEmail}
-              autoCapitalize="none"
             />
             <TextInput
               label={"Password"}
+              autoCapitalize="none"
+              autoCorrect={false}
               value={password}
               onChangeText={setPassword}
-              autoCapitalize="none"
               secureTextEntry
             />
             <Button
-              mode={"contained"}
+              mode="contained"
               disabled={isPending}
               onPress={() => login({ email, password })}
             >

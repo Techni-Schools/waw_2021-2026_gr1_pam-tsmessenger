@@ -5,7 +5,7 @@ class Auth extends AxiosManager {
     super(options);
   }
 
-  public login = async (data: { email: string; password: string }) => {
+  public readonly login = async (data: { email: string; password: string }) => {
     const { data: resData } = await this.instance.post<{
       data: { token: string };
     }>("/auth/login", data);
