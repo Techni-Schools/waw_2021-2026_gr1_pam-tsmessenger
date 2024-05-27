@@ -10,6 +10,7 @@ import { LoginScreenProps } from "./types";
 import { Button, HelperText, TextInput } from "react-native-paper";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen: React.FC<LoginScreenProps> = (props) => {
   const { navigation } = props;
@@ -24,8 +25,10 @@ const LoginScreen: React.FC<LoginScreenProps> = (props) => {
   } = useMutation({
     mutationFn: (variables: { email: string; password: string }) =>
       api.auth.login(variables),
-    onSuccess: () => {
-      navigate("Splash");
+    onSuccess: ({ token }) => {
+      AsyncStorage.setItem("auth-token", token).then(() => {
+        navigate("Splash");
+      });
     },
   });
 

@@ -6,6 +6,8 @@ const hostUri = Constants.expoConfig?.hostUri || "";
 const [address] = hostUri.split(":");
 const port = 8080;
 
+console.log(`http://${address}:${port}/api`);
+
 const api = new Api({
   baseURL: `http://${address}:${port}/api`,
   getAuthToken: async () => {

@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = (props) => {
         <Text variant="headlineMedium" style={{ fontWeight: "500" }}>
           {headline}
         </Text>
-        {description && <Text>{description}</Text>}
+        {description ? <Text>{description}</Text> : null}
       </View>
       <View>{children}</View>
     </View>

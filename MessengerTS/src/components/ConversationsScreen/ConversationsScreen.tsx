@@ -24,8 +24,8 @@ const ConversationsScreen: React.FC<ConversationsScreenProps> = (props) => {
         <ConversationsMenu />
       </Header>
       <ScrollView>
-        {isFetching && <ActivityIndicator />}
-        {conversations && (
+        {isFetching ? <ActivityIndicator /> : null}
+        {conversations ? (
           <View style={{ gap: 15 }}>
             {conversations.map((conversation) => (
               <ConversationListItem
@@ -37,7 +37,7 @@ const ConversationsScreen: React.FC<ConversationsScreenProps> = (props) => {
               />
             ))}
           </View>
-        )}
+        ) : null}
       </ScrollView>
     </SafeAreaView>
   );

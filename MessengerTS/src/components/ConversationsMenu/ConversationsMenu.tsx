@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View, Alert } from "react-native";
+import { View } from "react-native";
+import Dialog from "react-native-dialog";
 import styles from "./styles";
 import { ConversationsMenuProps } from "./types";
-import { Button, Menu as PaperMenu } from "react-native-paper";
+import { Button, Menu as PaperMenu, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../api";
@@ -13,6 +14,8 @@ const ConversationsMenu: React.FC<ConversationsMenuProps> = (props) => {
   const {} = props;
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isDialogOpened, setIsDialogOpened] = useState<boolean>(false);
+  const [conversationName, setConversationName] = useState<string>("");
   const { navigate } = useNavigation();
 
   const { mutate: logout } = useMutation({
@@ -26,14 +29,29 @@ const ConversationsMenu: React.FC<ConversationsMenuProps> = (props) => {
     onSuccess: (conversation) => {
       navigate("Conversation", { conversationId: conversation._id });
     },
-    onError: (error) => {
-      console.error(error);
-      Alert.alert(error?.message);
-    },
   });
 
   return (
     <View style={[styles.container]}>
+      <Dialog.Container visible={isDialogOpened}>
+        <Dialog.Title>New conversation</Dialog.Title>
+        <Dialog.Description>Enter name of conversation...</Dialog.Description>
+        <Dialog.Input
+          value={conversationName}
+          onChangeText={setConversationName}
+        />
+        <Dialog.Button
+          label="Cancel"
+          onPress={() => setIsDialogOpened(false)}
+        ></Dialog.Button>
+        <Dialog.Button
+          label="Create"
+          onPress={() => {
+            setIsDialogOpened(false);
+            createConversation({ name: conversationName });
+          }}
+        ></Dialog.Button>
+      </Dialog.Container>
       <PaperMenu
         visible={isVisible}
         onDismiss={() => setIsVisible(false)}
@@ -42,21 +60,13 @@ const ConversationsMenu: React.FC<ConversationsMenuProps> = (props) => {
             icon={"dots-vertical"}
             onPress={() => setIsVisible(!isVisible)}
           >
-            {""}
+            <Text>{""}</Text>
           </Button>
         }
       >
         <PaperMenu.Item
           title="New conversation"
-          onPress={() =>
-            Alert.prompt("New conversation", "Enter name of conversation...", [
-              { text: "Cancel", style: "cancel" },
-              {
-                text: "Create",
-                onPress: (name) => name && createConversation({ name }),
-              },
-            ])
-          }
+          onPress={() => setIsDialogOpened(true)}
         />
         <PaperMenu.Item
           title="My profile"
