@@ -1,13 +1,16 @@
 import { Conversation } from "../../../types";
 import AxiosManager, { Options } from "../AxiosManager";
 import Messages from "./messages";
+import Participants from "./participants";
 
 class Conversations extends AxiosManager {
   public readonly messages: Messages; // !
+  public readonly participants: Participants;
 
   constructor(options: Options) {
     super(options);
     this.messages = new Messages(options); // !
+    this.participants = new Participants(options);
   }
 
   public readonly list = async () => {
