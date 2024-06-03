@@ -21,6 +21,12 @@ const messageSchema = new Schema(
   { timestamps: true }
 );
 
+messageSchema.post("save", async () => {
+  // nazwa kanalu; nazwa zdarzenia; dane
+  const { conversation } = this;
+  pusher.trigger(conversation.toString(), "save-message", {});
+});
+
 const Message = model("Message", messageSchema);
 
 export default Message;
