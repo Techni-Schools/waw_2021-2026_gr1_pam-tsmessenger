@@ -9,7 +9,7 @@ class Participants extends AxiosManager {
   public readonly list = async (
     conversationId: Conversation["_id"],
     params?: {
-      populate?: string;
+      populate?: string | string[];
       limit?: number | undefined;
       skip?: number | undefined;
     }
