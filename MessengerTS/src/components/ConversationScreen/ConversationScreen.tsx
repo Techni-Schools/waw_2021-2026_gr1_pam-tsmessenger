@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import api from "../../api";
 import MessageInputBar from "../MessageInputBar";
 import MessageList from "../MessageList";
+import ConversationMenu from "../ConversationMenu";
 
 const ConversationScreen: React.FC<ConversationScreenProps> = (props) => {
   const { route, navigation } = props;
@@ -52,7 +53,9 @@ const ConversationScreen: React.FC<ConversationScreenProps> = (props) => {
         enabled
         keyboardVerticalOffset={10}
       >
-        <Header headline={conversation?.name || ""}></Header>
+        <Header headline={conversation?.name || ""}>
+          <ConversationMenu />
+        </Header>
         <MessageList messages={messages} />
         <MessageInputBar onSubmit={(content) => createMessage({ content })} />
       </KeyboardAvoidingView>
