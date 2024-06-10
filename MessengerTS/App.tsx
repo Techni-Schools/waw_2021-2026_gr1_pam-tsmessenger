@@ -11,6 +11,7 @@ import LoginScreen from "./src/components/LoginScreen";
 import RegisterScreen from "./src/components/RegisterScreen";
 import { queryClient } from "./queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { PusherProvider } from "@harelpls/use-pusher";
 
 export type ParamList = {
   Login: undefined;
@@ -32,27 +33,33 @@ const Stack = createNativeStackNavigator<ParamList>();
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <PaperProvider theme={theme}>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="Splash"
-            screenOptions={{
-              headerShown: false,
-              contentStyle: { backgroundColor: theme.colors?.background },
-            }}
-          >
-            <Stack.Screen name="Splash" component={SplashScreen} />
-            <Stack.Screen
-              name="Conversations"
-              component={ConversationsScreen}
-            />
-            <Stack.Screen name="Conversation" component={ConversationScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
+      {/* @ts-ignore */}
+      <PusherProvider clientKey="7d611eb6436fe6e14b1" cluster="eu">
+        <PaperProvider theme={theme}>
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName="Splash"
+              screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: theme.colors?.background },
+              }}
+            >
+              <Stack.Screen name="Splash" component={SplashScreen} />
+              <Stack.Screen
+                name="Conversations"
+                component={ConversationsScreen}
+              />
+              <Stack.Screen
+                name="Conversation"
+                component={ConversationScreen}
+              />
+              <Stack.Screen name="Profile" component={ProfileScreen} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </PaperProvider>
+      </PusherProvider>
     </QueryClientProvider>
   );
 }

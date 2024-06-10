@@ -10,6 +10,8 @@ import api from "../../api";
 import MessageInputBar from "../MessageInputBar";
 import MessageList from "../MessageList";
 import ConversationMenu from "../ConversationMenu";
+import { useChannel, useEvent } from "@harelpls/use-pusher";
+import { queryClient } from "../../../queryClient";
 
 const ConversationScreen: React.FC<ConversationScreenProps> = (props) => {
   const { route, navigation } = props;
@@ -38,6 +40,14 @@ const ConversationScreen: React.FC<ConversationScreenProps> = (props) => {
     mutationFn: (variables: { content: string }) =>
       api.conversations.messages.create(conversationId, variables),
     onSuccess: () => refetch(),
+  });
+
+  const channel = useChannel(conversationId);
+
+  useEvent(channel, "save-message", () => {
+    queryClient.invalidateQueries({
+      queryKey: ["api.conversations.messages.list", conversationId],
+    });
   });
 
   return (
